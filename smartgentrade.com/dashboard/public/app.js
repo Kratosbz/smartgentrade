@@ -2841,6 +2841,11 @@ async function handleWithdrawal() {
     source: type, // optional: to track where it came from
   });
 
+  console.log(  method,
+    amount,
+    address,
+   type,);
+  
   Swal.fire({
     icon: 'success',
     title: 'Withdrawal Submitted!',
