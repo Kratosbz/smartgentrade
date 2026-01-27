@@ -415,7 +415,7 @@
           <div class="section-title">Deposits</div>
           <div class="table-wrapper card">
             <table>
-              <thead><tr><th>From</th><th>Amount</th><th>Method</th><th>Status</th></tr></thead>
+              <thead><tr><th>From</th><th>Amount</th><th>Method</th><th>Status</th><th> Time</th></tr></thead>
               <tbody class="table-body"></tbody>
             </table>
           </div>
@@ -437,7 +437,7 @@
           <div class="section-title">Investment Plans</div>
           <div class="table-wrapper card">
             <table>
-              <thead><tr><th>From</th><th>Amount</th><th>Plan</th><th>Action</th></tr></thead>
+              <thead><tr><th>From</th><th>Amount</th><th>Plan</th><th>Status</th><th>startTime </th><th>endTime </th><th>Action</th></tr></thead>
               <tbody class="table-body"></tbody>
             </table>
           </div>
@@ -546,7 +546,7 @@
           <div class="section-title">Withdrawal Requests</div>
           <div class="table-wrapper card" style="padding:12px;">
             <table>
-              <thead><tr><th>From</th><th>Amount</th><th>Method</th><th>Address</th><th>Status</th><th>Approve</th><th>Decline</th></tr></thead>
+              <thead><tr><th>From</th><th>Amount</th><th>Method</th><th>Address</th><th>Status</th><th>Approve</th><th>Decline</th><th>Date</th></tr></thead>
               <tbody class="table-body"></tbody>
             </table>
           </div>
@@ -1283,11 +1283,15 @@ function sendUserDetail(user) {
     users.forEach(user => {
       const transactions = user.transactions || [];
       transactions.forEach(tx => {
+
+        const date=tx.timestamp
+        const resDate=new Date(date)
         const row = $('<tr>');
         row.append(`<td>${tx.from}</td>`);
         row.append(`<td>$${tx.amount}</td>`);
         row.append(`<td>${tx.method}</td>`);
         row.append(`<td>${tx.status}</td>`);
+         row.append(`<td>${resDate.toLocaleString()}</td>`);
         row.append(`
           <td>
             <a class="btn-primary btn-lg" onclick="window.approveDeposit('${user._id}', '${tx._id}')">Approve</a>
@@ -1381,6 +1385,9 @@ function sendUserDetail(user) {
           row.append(`<td>${transac.to}</td>`);
           row.append(`<td>$${transac.amount}</td>`);
           row.append(`<td>${transac.planName}</td>`);
+          row.append(`<td>${transac.status}</td>`);
+          row.append(`<td>${transac.startTime}</td>`);
+           row.append(`<td>${transac.endDate}</td>`);
           row.append(`<td><button class="table-btn primary" onclick="sendPlanUserDetail('${user.email}')">User Info</button></td>`);
           tbody.append(row);
         });
@@ -1922,12 +1929,16 @@ function sendUserDetail(user) {
       users.forEach(function(user){
         (user.withdrawals || []).forEach(function(request){
           const details = [user._id, request._id].join(',');
+
+          const date=request.timestamp
+        const resDate=new Date(date)
           const row = $('<tr>');
           row.append(`<td>${request.from}</td>`);
           row.append(`<td>$${request.amount}</td>`);
           row.append(`<td>${request.method}</td>`);
           row.append(`<td>${request.address}</td>`);
           row.append(`<td>${request.status}</td>`);
+          row.append(`<td>${resDate.toLocaleString()}</td>`);
           row.append(`<td><button class="table-btn primary" onclick="approveWithdrawal('${user._id}','${request._id}')">Approve</button></td>`);
           row.append(`<td><button class="table-btn danger" onclick="declineWithdrawal('${user._id}','${request._id}')">Decline</button></td>`);
           tbody.append(row);
